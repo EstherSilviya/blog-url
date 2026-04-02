@@ -8,11 +8,14 @@ function generateSlug(name) {
 
 async function createUniqueSlug(name) {
   const data = await getDocs(collection(db, "posts"));
+
   let baseSlug = generateSlug(name);
   let slug = baseSlug;
   let count = 1;
 
-  while (data.docs.find(doc => doc.data().slug === slug)) {
+  const existingSlugs = data.docs.map(doc => doc.data().slug);
+
+  while (existingSlugs.includes(slug)) {
     slug = `${baseSlug}-${count}`;
     count++;
   }
